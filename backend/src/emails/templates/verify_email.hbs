@@ -1,0 +1,220 @@
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>Verify Your Account - Doctly</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+      }
+
+      .main-box {
+        max-width: 600px;
+        margin: 40px auto;
+        background-color: #000c63; /* dark blue background */
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        color: #ffffff; /* white text */
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        text-align: center;
+      }
+
+      h1,
+      h2 {
+        margin: 10px 0;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .button {
+        background-color: #ffffff;
+        color: #000c63;
+        text-decoration: none;
+        display: inline-block;
+        margin: 20px 0;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 16px;
+        width: 120px;
+        padding: 10px 0;
+      }
+
+      .image-block {
+        margin: 20px 0;
+      }
+
+      .image-block img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+      }
+
+      .content-section {
+        padding: 20px 0;
+      }
+
+      .footer {
+        background-color: #000c63;
+        padding: 20px;
+        text-align: center;
+        font-size: 12px;
+      }
+
+      .social-icons img {
+        width: 20px;
+        margin: 0 5px;
+      }
+
+      hr {
+        border: 0;
+        border-top: 1px solid #ffffff;
+        margin: 20px 0;
+      }
+      .social-icons img {
+        width: 24px;
+        height: 24px;
+      }
+
+      /* Media Queries for Responsiveness */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 24px;
+        }
+
+        h2 {
+          font-size: 18px;
+        }
+
+        .button {
+          font-size: 14px;
+        }
+
+        .container {
+          padding: 10px;
+        }
+
+        .social-icons img {
+          width: 18px;
+        }
+
+        p {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 20px;
+        }
+
+        h2 {
+          font-size: 16px;
+        }
+
+        .button {
+          font-size: 14px;
+        }
+
+        p {
+          font-size: 13px;
+        }
+
+        .footer {
+          font-size: 12px;
+        }
+
+        .social-icons img {
+          width: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class='main-box'>
+      <div class='container'>
+        <!-- Header -->
+        <h2 style='margin-bottom: 20px;'>DOCTLY</h2>
+
+        <!-- Greeting and Main Heading -->
+        <h1 style='margin-bottom: 10px;'>Hi {{USER}},</h1>
+        <h2 style='margin-bottom: 20px;'>VERIFY YOUR ACCOUNT</h2>
+
+        <!-- Image Section -->
+        <div class='image-block'>
+          <img
+            src='https://png.pngtree.com/png-vector/20220629/ourmid/pngtree-businesspeople-talking-and-working-together-in-office-png-image_5592828.png'
+            alt='Verification Illustration'
+          />
+        </div>
+
+        <!-- Content Section -->
+        <div class='content-section'>
+          <p style='margin-bottom: 20px;'>
+            Please use the following link to verify your Doctly account and
+            secure your health profile.
+          </p>
+          <a href='{{TOKEN}}' class='button'>Verify Now</a>
+          <p style='margin-top: 20px;'>
+            Hop on to the verification page to activate your account.<br />
+            It’s valid for the next 30 minutes.
+          </p>
+          <p style='margin-top: 20px;'>
+            With Doctly, access your medical reports and track your health
+            anytime, anywhere. Stay connected with your doctor through our
+            secure, AI-powered platform for personalized care.
+          </p>
+        </div>
+
+        <!-- Divider -->
+        <hr />
+
+        <!-- Footer -->
+        <div class='footer'>
+          <p>Corporation<br />
+            You are receiving this email because you opted in via our website.</p>
+          <div class='social-icons'>
+            <a href='{{twitterUrl}}'><img
+                src='https://cdn-icons-png.flaticon.com/512/733/733579.png'
+                alt='Twitter'
+              /></a>
+            <a href='{{instagramUrl}}'><img
+                src='https://cdn-icons-png.flaticon.com/512/733/733558.png'
+                alt='Instagram'
+              /></a>
+            <a href='{{youtubeUrl}}'><img
+                src='https://static.vecteezy.com/system/resources/previews/042/127/234/non_2x/white-square-bordered-youtube-logo-on-transparent-background-free-png.png'
+                alt='YouTube'
+              /></a>
+            <a href='{{websiteUrl}}'><img
+                src='https://images.seeklogo.com/logo-png/27/2/google-gmail-logo-png_seeklogo-273201.png'
+                alt='Website'
+              /></a>
+            <a href='{{linkedinUrl}}'><img
+                src='https://cdn-icons-png.flaticon.com/512/733/733561.png'
+                alt='LinkedIn'
+              /></a>
+          </div>
+          <h1 style='margin-top: 10px;'>DOCTLY</h1>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

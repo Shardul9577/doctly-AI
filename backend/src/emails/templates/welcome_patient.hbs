@@ -1,0 +1,276 @@
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <title>Welcome to Doctly</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+
+        color: #ffffff;
+      }
+
+      .main-box {
+        max-width: 600px;
+        margin: 40px auto;
+        background-color: #000c63; /* dark blue background */
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        color: #ffffff; /* white text */
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      h1,
+      h2 {
+        margin: 10px 0;
+      }
+
+      h1 {
+        font-size: 28px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      p {
+        font-size: 16px;
+        line-height: 1.6;
+      }
+
+      .button {
+        background-color: #ffffff;
+        color: #000c63;
+        padding: 12px 24px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+        border-radius: 5px;
+        font-weight: bold;
+        font-size: 16px;
+      }
+
+      .save-time-section {
+        padding: 50px 0;
+        width: 100%;
+      }
+
+      .save-time-section .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .save-time-section .content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        background-color: #e2d4ff;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      .save-time-section .text-block {
+        flex: 1 1 50%;
+        font-family: Arial, sans-serif;
+        color: #1e1e1e;
+      }
+
+      .save-time-section .text-block h2 {
+        font-size: 24px;
+        color: #4b0082;
+        margin-bottom: 15px;
+      }
+
+      .save-time-section .text-block p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #444444;
+      }
+
+      .save-time-section .image-block {
+        flex: 1 1 40%;
+        text-align: right;
+      }
+
+      .save-time-section .image-block img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+      }
+
+      .footer {
+        background-color: #000c63;
+        padding: 20px;
+        text-align: center;
+        font-size: 12px;
+      }
+
+      .social-icons img {
+        width: 20px;
+        margin: 0 5px;
+      }
+
+      /* ---------- Media Queries for Responsiveness ---------- */
+      @media (max-width: 768px) {
+        h1 {
+          font-size: 24px;
+        }
+
+        h2 {
+          font-size: 18px;
+        }
+
+        .button {
+          font-size: 14px;
+          padding: 10px 20px;
+        }
+
+        .save-time-section .content {
+          flex-direction: column;
+          text-align: center;
+          padding: 20px;
+        }
+
+        .save-time-section .image-block {
+          text-align: center;
+          margin-top: 20px;
+        }
+
+        .save-time-section .text-block h2 {
+          font-size: 20px;
+        }
+
+        .save-time-section .text-block p {
+          font-size: 14px;
+        }
+
+        .container {
+          padding: 10px;
+        }
+
+        .social-icons img {
+          width: 18px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 20px;
+        }
+
+        h2 {
+          font-size: 16px;
+        }
+
+        .button {
+          width: 100%;
+          font-size: 14px;
+        }
+
+        .save-time-section .content {
+          padding: 15px;
+        }
+
+        .save-time-section .text-block p {
+          font-size: 13px;
+        }
+
+        .footer {
+          font-size: 10px;
+        }
+
+        .social-icons img {
+          width: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class='main-box'>
+      <div class='container'>
+        <h2 style='text-align: center; margin-bottom:10%'>DOCTLY</h2>
+
+        <h1 style='text-align: center; margin-bottom:10%'>Hi {{USER}},</h1>
+
+        <h2 style='text-align: center;'>You’re Successfully Registered!</h2>
+
+        <div style='text-align: center;'>
+          <img
+            src='https://png.pngtree.com/png-vector/20220629/ourmid/pngtree-businesspeople-talking-and-working-together-in-office-png-image_5592828.png'
+            alt='Welcome'
+            style='max-width: 100%; border-radius: 10px;'
+          />
+          <p style='margin-top: 20px;'>Welcome to Doctly – a smarter way to
+            manage your health. Your secure health profile is now active.</p>
+          <a href='{{LOGIN}}' class='button'>Try it now!</a>
+        </div>
+
+        <section class='save-time-section'>
+          <div class='container'>
+            <div class='content'>
+              <div class='text-block'>
+                <h2>Records. <br />Reports. Ready.</h2>
+                <p>
+                  With Doctly, access your medical reports and track your health
+                  anytime, anywhere. Stay connected with your doctor through our
+                  secure, AI-powered platform for personalized care.
+                </p>
+              </div>
+              <div class='image-block'>
+                <img
+                  src='https://png.pngtree.com/png-vector/20220725/ourmid/pngtree-web-site-development-programmer-girl-png-image_6074556.png'
+                  alt='AI-powered doctor tools'
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <p style='text-align: left; padding: 0 20px;'>
+          Doctly helps doctors by automating documentation, predicting diseases
+          early, simplifying insurance processes, integrating patient history,
+          and saving consultation time with AI-driven tools.
+        </p>
+
+        <hr />
+
+        <div class='footer'>
+          <p>Corporation<br />
+            You are receiving this email because you opted in via our website.</p>
+          <div class='social-icons'>
+            <a href='{{twitterUrl}}'><img
+                src='https://cdn-icons-png.flaticon.com/512/733/733579.png'
+                alt='Twitter'
+              /></a>
+            <a href='{{instagramUrl}}'><img
+                src='https://cdn-icons-png.flaticon.com/512/733/733558.png'
+                alt='Instagram'
+              /></a>
+            <a href='{{youtubeUrl}}'><img
+                src='https://static.vecteezy.com/system/resources/previews/042/127/234/non_2x/white-square-bordered-youtube-logo-on-transparent-background-free-png.png'
+                alt='YouTube'
+              /></a>
+            <a href='{{websiteUrl}}'><img
+                src='https://images.seeklogo.com/logo-png/27/2/google-gmail-logo-png_seeklogo-273201.png'
+                alt='Website'
+              /></a>
+            <a href='{{linkedinUrl}}'><img
+                src='https://cdn-icons-png.flaticon.com/512/733/733561.png'
+                alt='LinkedIn'
+              /></a>
+          </div>
+          <h1 style='margin-top: 10px;'>DOCTLY</h1>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

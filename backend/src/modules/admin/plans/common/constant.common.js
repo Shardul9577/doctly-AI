@@ -1,0 +1,16 @@
+export const MESSAGES = {
+  PLAN_CREATED_SUCCESSFULLY: 'Plan created successfully.',
+  PLAN_UPDATED_SUCCESSFULLY: 'Plan updated successfully.',
+  PLAN_DELETED_SUCCESSFULLY: 'Plan deleted successfully.',
+  PLAN_NOT_FOUND: 'Plan not found.',
+  PLANS_RETRIEVED_SUCCESSFULLY: 'Plans retrieved successfully.',
+  PLAN_RETRIEVED_SUCCESSFULLY: 'Plan retrieved successfully.',
+  ACTIVE_PLANS_RETRIEVED_SUCCESSFULLY: 'Active plans retrieved successfully.',
+  PLAN_ALREADY_EXISTS: 'Plan with this name already exists.',
+  PLAN_STATUS_UPDATED: 'Plan status updated successfully.',
+  PLAN_STATISTICS_RETRIEVED: 'Plan statistics retrieved successfully.',
+  INVALID_PLAN_DATA: 'Invalid plan data provided.',
+  PLAN_DELETION_FAILED: 'Failed to delete plan.',
+  PLAN_UPDATE_FAILED: 'Failed to update plan.',
+  PLAN_CREATION_FAILED: 'Failed to create plan.',
+};
