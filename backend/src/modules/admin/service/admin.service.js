@@ -2,7 +2,7 @@
 
 import User from '../../../models/user.model.js';
 import PersonalDetails from '../../../models/personalDetail.model.js';
-import Organizations from '../../../models/Organization.model.js';
+import Organizations from '../../../models/organization.model.js';
 import { MESSAGES } from '../common/constant.common.js';
 import emailService from '../../../emails/services/mail.service.js';
 import Blog from '../../../models/blog.model.js';
