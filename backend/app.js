@@ -21,6 +21,9 @@ import aiRoutes from './src/modules/AI/routes/ai.routes.js';
 
 const app = express();
 
+// Render / other reverse proxies: restore real client IP for rate limiting and logs
+app.set('trust proxy', 1);
+
 /* ==========================
    Database Connection
 ========================== */
@@ -39,16 +42,22 @@ app.use(
   }),
 );
 
-// Set security-related HTTP headers
-app.use(helmet());
+// Default Helmet sets Cross-Origin-Resource-Policy: same-origin, which blocks the browser
+// from reading cross-origin API responses (Network tab shows a generic "CORS error").
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  }),
+);
 
-// Apply rate limiting to all requests
+// Do not count CORS preflights toward the limit (OPTIONS would otherwise waste budget)
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // Limit each IP to 100 requests per window
     standardHeaders: true,
     legacyHeaders: false,
+    skip: (req) => req.method === 'OPTIONS',
   }),
 );
 
