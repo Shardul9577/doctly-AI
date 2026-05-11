@@ -35,13 +35,7 @@ connectDB(); // Connect to MongoDB
 
 // CORS: allow any browser origin. `origin: true` reflects the request Origin (required when
 // `credentials: true`; using `origin: '*'` would make browsers reject the response).
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  }),
-);
-
+app.use(cors());
 // Default Helmet sets Cross-Origin-Resource-Policy: same-origin, which blocks the browser
 // from reading cross-origin API responses (Network tab shows a generic "CORS error").
 app.use(
