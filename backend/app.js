@@ -34,9 +34,7 @@ connectDB(); // Connect to MongoDB
 // CORS: prefer configured frontend origin(s); comma-separated for multiple
 app.use(
   cors({
-    origin: FRONTEND_URL
-      ? FRONTEND_URL.split(',').map((o) => o.trim())
-      : true,
+    origin: '*',
     credentials: true,
   }),
 );
