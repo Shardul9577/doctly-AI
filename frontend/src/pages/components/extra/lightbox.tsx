@@ -57,7 +57,7 @@ export default function DemoLightbox() {
             <HeaderBreadcrumbs
               heading="Lightbox"
               links={[{ name: 'Components', href: PATH_PAGE.components }, { name: 'Lightbox' }]}
-              moreLink="https://www.npmjs.com/package/react-image-lightbox"
+              moreLink="https://www.npmjs.com/package/yet-another-react-lightbox"
             />
           </Container>
         </Box>

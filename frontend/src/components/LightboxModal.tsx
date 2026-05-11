@@ -1,100 +1,26 @@
-import { useEffect } from 'react';
-import Lightbox, { ILightBoxProps } from 'react-image-lightbox';
+import { useEffect, useMemo, useRef, type Dispatch, type SetStateAction } from 'react';
+import Lightbox from 'yet-another-react-lightbox';
+import Counter from 'yet-another-react-lightbox/plugins/counter';
+import Zoom from 'yet-another-react-lightbox/plugins/zoom';
+import 'yet-another-react-lightbox/styles.css';
+import 'yet-another-react-lightbox/plugins/counter.css';
 // @mui
 import { useTheme, alpha } from '@mui/material/styles';
-import { Typography, GlobalStyles } from '@mui/material';
+import { GlobalStyles } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
 function LightboxModalStyles() {
   const theme = useTheme();
 
-  const isRTL = theme.direction === 'rtl';
-
-  const ICON_SIZE = 32;
-
-  const ICON_COLOR = theme.palette.grey[600].replace('#', '');
-
-  const getIcon = (icon: string) =>
-    `url(https://api.iconify.design/carbon/${icon}.svg?color=%23${ICON_COLOR}&width=${ICON_SIZE}&height=${ICON_SIZE})`;
-
-  const Icon = (icon: string) => ({
-    opacity: 1,
-    alignItems: 'center',
-    display: 'inline-flex',
-    justifyContent: 'center',
-    backgroundImage: `unset`,
-    backgroundColor: 'transparent',
-    transition: theme.transitions.create('opacity'),
-    '&:before': {
-      display: 'block',
-      width: ICON_SIZE,
-      height: ICON_SIZE,
-      content: getIcon(icon),
-    },
-    '&:hover': {
-      opacity: 0.72,
-    },
-  });
+  const backdrop = alpha(theme.palette.grey[900], 0.96);
 
   return (
     <GlobalStyles
       styles={{
-        '& .ReactModalPortal': {
-          '& .ril__outer': {
-            backgroundColor: alpha(theme.palette.grey[900], 0.96),
-          },
-
-          // Toolbar
-          '& .ril__toolbar': {
-            height: 'auto !important',
-            padding: theme.spacing(2, 3),
-            backgroundColor: 'transparent',
-          },
-          '& .ril__toolbarLeftSide': { display: 'none' },
-          '& .ril__toolbarRightSide': {
-            height: 'auto !important',
-            padding: 0,
-            flexGrow: 1,
-            display: 'flex',
-            alignItems: 'center',
-            '& li': {
-              display: 'flex',
-              alignItems: 'center',
-            },
-            '& li:first-of-type': {
-              flexGrow: 1,
-            },
-            '& li:not(:first-of-type)': {
-              width: 40,
-              height: 40,
-              justifyContent: 'center',
-              marginLeft: theme.spacing(2),
-            },
-          },
-
-          // Button
-          '& button:focus': { outline: 'none' },
-          '& .ril__toolbarRightSide button': {
-            width: '100%',
-            height: '100%',
-            '&.ril__zoomInButton': Icon('zoom-in'),
-            '&.ril__zoomOutButton': Icon('zoom-out'),
-            '&.ril__closeButton': Icon('close'),
-          },
-          '& .ril__navButtons': {
-            padding: theme.spacing(3),
-            '&.ril__navButtonPrev': {
-              right: 'auto',
-              left: theme.spacing(2),
-              ...Icon(isRTL ? 'arrow-right' : 'arrow-left'),
-            },
-            '&.ril__navButtonNext': {
-              left: 'auto',
-              right: theme.spacing(2),
-              ...Icon(isRTL ? 'arrow-left' : 'arrow-right'),
-            },
-          },
+        '.yarl__root': {
+          '--yarl__color_backdrop': backdrop,
+          zIndex: 9999,
         },
       }}
     />
@@ -103,20 +29,37 @@ function LightboxModalStyles() {
 
 // ----------------------------------------------------------------------
 
-interface Props extends ILightBoxProps {
+export type LightboxModalProps = {
   images: string[];
   photoIndex: number;
-  setPhotoIndex: (index: number) => void;
+  setPhotoIndex: Dispatch<SetStateAction<number>>;
   isOpen: boolean;
-}
+  /** Kept for call-site compatibility; the visible slide is `images[photoIndex]`. */
+  mainSrc?: string;
+  onCloseRequest: () => void;
+  animationDuration?: number;
+  /** When set (e.g. product carousel), invoked instead of only updating `photoIndex` for prev navigation. */
+  onMovePrevRequest?: () => void;
+  /** When set (e.g. product carousel), invoked instead of only updating `photoIndex` for next navigation. */
+  onMoveNextRequest?: () => void;
+};
 
 export default function LightboxModal({
   images,
   photoIndex,
   setPhotoIndex,
   isOpen,
-  ...other
-}: Props) {
+  onCloseRequest,
+  animationDuration = 160,
+  onMovePrevRequest,
+  onMoveNextRequest,
+}: LightboxModalProps) {
+  const prevIndexRef = useRef(photoIndex);
+
+  useEffect(() => {
+    prevIndexRef.current = photoIndex;
+  }, [photoIndex]);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -125,34 +68,51 @@ export default function LightboxModal({
     }
   }, [isOpen]);
 
-  const showIndex = (
-    <Typography variant="subtitle2">{`${photoIndex + 1} / ${images.length}`}</Typography>
-  );
+  const slides = useMemo(() => images.map((src) => ({ src })), [images]);
 
-  const toolbarButtons = [showIndex];
-
-  const customStyles = {
-    overlay: {
-      zIndex: 9999,
-    },
-  };
+  const hasCustomNav = Boolean(onMoveNextRequest || onMovePrevRequest);
 
   return (
     <>
       <LightboxModalStyles />
 
-      {isOpen && (
-        <Lightbox
-          animationDuration={160}
-          nextSrc={images[(photoIndex + 1) % images.length]}
-          prevSrc={images[(photoIndex + images.length - 1) % images.length]}
-          onMovePrevRequest={() => setPhotoIndex((photoIndex + images.length - 1) % images.length)}
-          onMoveNextRequest={() => setPhotoIndex((photoIndex + 1) % images.length)}
-          toolbarButtons={toolbarButtons}
-          reactModalStyle={customStyles}
-          {...other}
-        />
-      )}
+      <Lightbox
+        open={isOpen}
+        close={onCloseRequest}
+        index={photoIndex}
+        slides={slides}
+        animation={{
+          fade: animationDuration,
+          swipe: animationDuration,
+          navigation: animationDuration,
+        }}
+        plugins={[Counter, Zoom]}
+        carousel={{ finite: images.length <= 1 }}
+        on={{
+          view: ({ index: nextIndex }) => {
+            const prev = prevIndexRef.current;
+            const n = images.length;
+            if (!n || nextIndex === prev) {
+              return;
+            }
+
+            if (hasCustomNav) {
+              const forward = nextIndex === (prev + 1) % n;
+              const backward = nextIndex === (prev + n - 1) % n;
+              if (forward && onMoveNextRequest) {
+                onMoveNextRequest();
+              } else if (backward && onMovePrevRequest) {
+                onMovePrevRequest();
+              } else {
+                setPhotoIndex(nextIndex);
+              }
+            } else {
+              setPhotoIndex(nextIndex);
+            }
+            prevIndexRef.current = nextIndex;
+          },
+        }}
+      />
     </>
   );
 }
