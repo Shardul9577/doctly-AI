@@ -94,6 +94,11 @@ export const defaultSettings: SettingsValueProps = {
 
 export const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+/** Client-side request timeout (ms). Hosted APIs often cold-start (e.g. Render free tier); 0 = no limit. */
+const _rawTimeout = Number(process.env.NEXT_PUBLIC_API_TIMEOUT_MS ?? 120000);
+export const API_REQUEST_TIMEOUT_MS =
+  Number.isFinite(_rawTimeout) && _rawTimeout >= 0 ? _rawTimeout : 120000;
+
 // MULTI LANGUAGES
 // Please remove `localStorage` when you change settings.
 // ----------------------------------------------------------------------

@@ -4,7 +4,6 @@ import axios from '../utils/axios';
 import { isValidToken, setSession } from '../utils/jwt';
 // @types
 import { ActionMap, AuthState, AuthUser, JWTContextType } from '../@types/auth';
-import { BACKEND_URL } from '../config';
 import { useRouter } from 'next/router';
 import { SnackbarProvider } from 'notistack';
 
@@ -116,7 +115,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   // }, []);
 
   const login = async (email: string, password: string) => {
-    const response = await axios.post(`${BACKEND_URL}/api/auth/login`, {
+    const response = await axios.post('/api/auth/login', {
       email,
       password,
     });
@@ -148,7 +147,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     role: string,
     showSuccess?: (message: string) => void
   ) => {
-    const response = await axios.post(`${BACKEND_URL}/api/auth/register`, {
+    const response = await axios.post('/api/auth/register', {
       email,
       password,
       firstName,
