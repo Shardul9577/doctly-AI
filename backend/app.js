@@ -6,7 +6,6 @@ import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 
 // Local modules
-import { FRONTEND_URL } from './src/config/env.config.js';
 import connectDB from './src/config/connect.db.js';
 import errorHandler from './src/middleware/error.middleware.js';
 import authRoutes from './src/modules/auth/routes/auth.routes.js';
@@ -31,10 +30,11 @@ connectDB(); // Connect to MongoDB
    Global Middlewares
 ========================== */
 
-// CORS: prefer configured frontend origin(s); comma-separated for multiple
+// CORS: allow any browser origin. `origin: true` reflects the request Origin (required when
+// `credentials: true`; using `origin: '*'` would make browsers reject the response).
 app.use(
   cors({
-    origin: '*',
+    origin: true,
     credentials: true,
   }),
 );
