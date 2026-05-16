@@ -20,10 +20,10 @@ import { useTheme } from '@mui/material/styles';
 import Iconify from '../../../components/Iconify';
 import Image from '../../../components/Image';
 import { VisitCardProps } from 'src/@types/user';
+import { PATH_DASHBOARD } from 'src/routes/paths';
 import { useRouter } from 'next/router';
 import { useSnackbar } from 'notistack';
 import axiosInstance from 'src/utils/axios';
-import axios from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -333,55 +333,18 @@ export default function ChatReport({
 
   async function onApprove() {
     try {
-      // const res = await axiosInstance.patch(`/api/doctors/visit/${visit._id}`, {
-      //   status: 'completed',
-      // });
-
-      try {
-        const phoneNumber = '917801826550'; // Fallback to default if not found
-
-        const response = await axios.post(
-          'https://graph.facebook.com/v22.0/886881031173174/messages',
-          {
-            messaging_product: 'whatsapp',
-            to: phoneNumber,
-            type: 'template',
-            template: {
-              name: 'patient_report',
-              language: { code: 'en' },
-            },
-          },
-          {
-            headers: {
-              Authorization: `Bearer EAALrUQ4JiRcBQfo8QIy3HAhoe5pUda6ZArqntAWrYAWkKfJ7j1dF49I3HhnQ1HREFCmt122copdoZCF5UJPBbrBNg3e08lT1Q1E1CB1rBHATKTVnZB8iK9pUkoutHzsD9L9WI318LRXByngdlB4E7HldccCTcWswZBMsmD51seYm1Q3EbgdSqxE2CgXJspZB99LRUbqqQtwG10MFLsvIscufNNZB2ZABZAwAROC5jIWZAbt94YCUmAJ8jTMJpDL2dlYMwgvFjXS9olY98oGeJZC0PBttnLvYkZD`,
-              'Content-Type': 'application/json',
-            },
-          },
-        );
-
-        enqueueSnackbar('WhatsApp message sent successfully', {
-          variant: 'success',
-        });
-        console.log('Approve report:', reportData?.reportId);
-      } catch (error: any) {
-        console.error('Error sending WhatsApp message:', error);
-        enqueueSnackbar(
-          error.response?.data?.error?.message ||
-            'Failed to send WhatsApp message',
-          {
-            variant: 'error',
-          },
-        );
-      }
+      await axiosInstance.patch(`/api/doctors/visit/${visit._id}`, {
+        status: 'completed',
+      });
+      enqueueSnackbar('Visit approved successfully', { variant: 'success' });
+      router.push(PATH_DASHBOARD.general.booking);
     } catch (error: any) {
       console.error('Failed to approve visit:', error);
       enqueueSnackbar(
         error.response?.data?.message ||
           error.message ||
           'Failed to approve visit',
-        {
-          variant: 'error',
-        },
+        { variant: 'error' },
       );
     }
   }
