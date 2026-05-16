@@ -1,36 +1,35 @@
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Container, Grid, Stack, Button } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Box,
+  CircularProgress,
+  Alert,
+  Button,
+} from '@mui/material';
+import NextLink from 'next/link';
 // hooks
-import useAuth from '../../hooks/useAuth';
 import useSettings from '../../hooks/useSettings';
+import useDoctorDashboard from '../../hooks/useDoctorDashboard';
 // layouts
 import Layout from '../../layouts';
-// _mock_
-import {
-  _appFeatured,
-  _appAuthors,
-  _appInstalled,
-  _appRelated,
-  _appInvoices,
-} from '../../_mock';
 // components
 import Page from '../../components/Page';
 // sections
 import {
-  AppWidget,
   AppWelcome,
-  AppFeatured,
-  AppNewInvoice,
-  AppTopAuthors,
-  AppTopRelated,
-  AppAreaInstalled,
   AppWidgetSummary,
   AppCurrentDownload,
-  AppTopInstalledCountries,
 } from '../../sections/@dashboard/general/app';
+import { AnalyticsWebsiteVisits } from '../../sections/@dashboard/general/analytics';
+import {
+  DoctorRecentVisitsTable,
+  DoctorQuickActions,
+} from '../../sections/@dashboard/doctor';
+import { PATH_DASHBOARD } from '../../routes/paths';
 // assets
-import { SeoIllustration } from '../../assets';
+import { DocIllustration } from '../../assets';
 
 // ----------------------------------------------------------------------
 
@@ -41,183 +40,156 @@ GeneralApp.getLayout = function getLayout(page: React.ReactElement) {
 // ----------------------------------------------------------------------
 
 export default function GeneralApp() {
-  // const { user } = useAuth();
+  const theme = useTheme();
+  const { themeStretch } = useSettings();
+  const { loading, error, stats } = useDoctorDashboard();
 
-  const userStringData = localStorage.getItem('userData');
+  const userStringData =
+    typeof window !== 'undefined' ? localStorage.getItem('userData') : null;
   const user = userStringData ? JSON.parse(userStringData) : null;
 
-  const theme = useTheme();
-
   const formatName = (name?: string) => {
-    if (!name) return 'Guest';
+    if (!name) return '';
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   };
 
-  const { themeStretch } = useSettings();
+  const doctorName = [formatName(user?.firstName), formatName(user?.lastName)]
+    .filter(Boolean)
+    .join(' ');
+
+  const statusChart =
+    stats.statusBreakdown.length > 0
+      ? stats.statusBreakdown
+      : [{ label: 'No data', value: 1 }];
+
+  const statusColors = [
+    theme.palette.primary.main,
+    theme.palette.info.main,
+    theme.palette.warning.main,
+    theme.palette.success.main,
+    theme.palette.error.main,
+  ];
+
+  if (loading) {
+    return (
+      <Page title="Dashboard">
+        <Container maxWidth={themeStretch ? false : 'xl'}>
+          <Box sx={{ py: 12, display: 'flex', justifyContent: 'center' }}>
+            <CircularProgress />
+          </Box>
+        </Container>
+      </Page>
+    );
+  }
 
   return (
-    <Page title="General: App">
+    <Page title="Dashboard">
       <Container maxWidth={themeStretch ? false : 'xl'}>
+        {error && (
+          <Alert severity="warning" sx={{ mb: 3 }}>
+            {error}. Showing available data.
+          </Alert>
+        )}
+
         <Grid container spacing={3}>
-          <Grid item xs={12} md={12}>
+          <Grid item xs={12}>
             <AppWelcome
-              title={`Welcome to your space \n Dr. ${
-                formatName(user?.firstName) + ' ' + formatName(user?.lastName)
-              }`}
-              description="Deliver care, track progress, and connect with your patients like never before."
+              title={`Welcome back${doctorName ? `,\nDr. ${doctorName}` : ''}`}
+              description="Your practice at a glance — patients, visits, and care delivery in one place."
               img={
-                <SeoIllustration
+                <DocIllustration
                   sx={{
                     p: 3,
-                    width: 360,
+                    width: 320,
                     margin: { xs: 'auto', md: 'inherit' },
                   }}
                 />
               }
-              // action={<Button variant="contained">Go Now</Button>}
+              action={
+                <NextLink href={PATH_DASHBOARD.visits.new} passHref>
+                  <Button variant="contained" component="a">
+                    Schedule visit
+                  </Button>
+                </NextLink>
+              }
             />
           </Grid>
 
-          {/* <Grid item xs={12} md={4}>
-            <AppFeatured list={_appFeatured} />
-          </Grid> */}
+          <Grid item xs={12}>
+            <DoctorQuickActions />
+          </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
-              title="Number of Patients"
-              percent={2.6}
-              total={18765}
+              title="Total patients"
+              percent={stats.patientTrendPercent}
+              total={stats.totalPatients}
               chartColor={theme.palette.primary.main}
-              chartData={[5, 18, 12, 51, 68, 11, 39, 37, 27, 20]}
+              chartData={stats.patientSparkline}
             />
           </Grid>
 
-          {/* <Grid item xs={12} md={4}>
+          <Grid item xs={12} sm={6} md={3}>
             <AppWidgetSummary
-              title="Total Installed"
-              percent={0.2}
-              total={4876}
-              chartColor={theme.palette.chart.blue[0]}
-              chartData={[20, 41, 63, 33, 28, 35, 50, 46, 11, 26]}
-            />
-          </Grid> */}
-
-          <Grid item xs={12} md={6}>
-            <AppWidgetSummary
-              title="Today's Visits"
-              percent={-0.1}
-              total={678}
-              chartColor={theme.palette.chart.red[0]}
-              chartData={[8, 9, 31, 8, 16, 37, 8, 33, 46, 31]}
+              title="Total visits"
+              percent={stats.visitTrendPercent}
+              total={stats.totalVisits}
+              chartColor={theme.palette.info.main}
+              chartData={stats.visitSparkline}
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={4}>
+          <Grid item xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="Today's visits"
+              percent={0}
+              total={stats.todayVisits}
+              chartColor={theme.palette.success.main}
+              chartData={stats.visitSparkline}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <AppWidgetSummary
+              title="Pending visits"
+              percent={0}
+              total={stats.pendingVisits}
+              chartColor={theme.palette.warning.main}
+              chartData={stats.visitSparkline}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={5} lg={4}>
             <AppCurrentDownload
-              title="Type of common disease among all patientes yet visited !"
-              chartColors={[
-                theme.palette.primary.lighter,
-                theme.palette.primary.light,
-                theme.palette.primary.main,
-                theme.palette.primary.dark,
-              ]}
-              chartData={[
-                { label: 'Mac', value: 12244 },
-                { label: 'Window', value: 53345 },
-                { label: 'iOS', value: 44313 },
-                { label: 'Android', value: 78343 },
-              ]}
+              title="Visits by status"
+              subheader="Current distribution"
+              chartColors={statusColors}
+              chartData={statusChart}
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
-            <AppAreaInstalled
-              title="Number of Patients"
-              subheader="(+43%) than last year"
-              chartLabels={[
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May',
-                'Jun',
-                'Jul',
-                'Aug',
-                'Sep',
-              ]}
+          <Grid item xs={12} md={7} lg={8}>
+            <AnalyticsWebsiteVisits
+              title="Monthly visits"
+              subheader="Last 6 months"
+              chartLabels={stats.monthlyVisits.labels}
               chartData={[
                 {
-                  year: '2019',
-                  data: [
-                    {
-                      name: 'Asia',
-                      data: [10, 41, 35, 51, 49, 62, 69, 91, 148],
-                    },
-                    {
-                      name: 'America',
-                      data: [10, 34, 13, 56, 77, 88, 99, 77, 45],
-                    },
-                  ],
-                },
-                {
-                  year: '2020',
-                  data: [
-                    {
-                      name: 'Asia',
-                      data: [148, 91, 69, 62, 49, 51, 35, 41, 10],
-                    },
-                    {
-                      name: 'America',
-                      data: [45, 77, 99, 88, 77, 56, 13, 34, 10],
-                    },
-                  ],
+                  name: 'Visits',
+                  type: 'area',
+                  fill: 'gradient',
+                  data: stats.monthlyVisits.data,
                 },
               ]}
             />
           </Grid>
 
-          <Grid item xs={12} lg={12}>
-            <AppNewInvoice
-              title="All Invoices"
-              tableData={_appInvoices}
-              tableLabels={[
-                { id: 'id', label: 'Invoice ID' },
-                { id: 'category', label: 'Category' },
-                { id: 'price', label: 'Price' },
-                { id: 'status', label: 'Status' },
-                { id: '' },
-              ]}
+          <Grid item xs={12}>
+            <DoctorRecentVisitsTable
+              title="Recent visits"
+              subheader="Latest patient appointments"
+              visits={stats.recentVisits}
             />
-          </Grid>
-
-          {/* <Grid item xs={12} md={6} lg={4}>
-            <AppTopRelated title="Top Related Applications" list={_appRelated} />
-          </Grid> */}
-
-          {/* <Grid item xs={12} md={6} lg={4}>
-            <AppTopInstalledCountries title="Top Installed Countries" list={_appInstalled} />
-          </Grid> */}
-
-          {/* <Grid item xs={12} md={12}>
-            <AppTopAuthors title="Top Authors" list={_appAuthors} />
-          </Grid> */}
-
-          <Grid item xs={12} md={12}>
-            <Stack spacing={3}>
-              <AppWidget
-                title="Total Reports"
-                total={38566}
-                icon={'eva:person-fill'}
-                chartData={48}
-              />
-              <AppWidget
-                title="Applications"
-                total={55566}
-                icon={'eva:email-fill'}
-                color="warning"
-                chartData={75}
-              />
-            </Stack>
           </Grid>
         </Grid>
       </Container>

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import palette from '../theme/palette';
+import { absoluteUrl } from '../utils/url';
 import createCache from '@emotion/cache';
 import createEmotionServer from '@emotion/server/create-instance';
 import { CacheProvider } from '@emotion/react';
@@ -59,9 +60,12 @@ export default class MyDocument extends Document {
             property='og:description'
             content='Transforming healthcare with AI: Doctly automates doctor-patient documentation and predicts disease risks for smarter, seamless care.'
           />
-          <meta property='og:image' content='/images/doctly-og-image.png' />
+          <meta
+            property='og:image'
+            content={absoluteUrl('/images/doctly-og-image.png')}
+          />
           <meta property='og:type' content='website' />
-          <meta property='og:url' content='https://doctly.ai' />
+          <meta property='og:url' content={absoluteUrl('/')} />
 
           {/* Twitter Card */}
           <meta name='twitter:card' content='summary_large_image' />
@@ -73,7 +77,10 @@ export default class MyDocument extends Document {
             name='twitter:description'
             content='Doctly empowers doctors with AI tools for automated documentation and early disease prediction.'
           />
-          <meta name='twitter:image' content='/images/doctly-og-image.png' />
+          <meta
+            name='twitter:image'
+            content={absoluteUrl('/images/doctly-og-image.png')}
+          />
         </Head>
 
         <body>

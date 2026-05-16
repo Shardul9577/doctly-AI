@@ -24,6 +24,7 @@ import Image from '../../../../components/Image';
 import Iconify from '../../../../components/Iconify';
 import { CarouselArrows } from '../../../../components/carousel';
 import axiosInstance from 'src/utils/axios';
+import { PATH_DASHBOARD } from 'src/routes/paths';
 import { Autocomplete, Chip } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -527,7 +528,7 @@ function BookingItem({ item }: BookingItemProps) {
   const { push } = useRouter();
 
   function redirect(id: string) {
-    push(`http://localhost:8081/dashboard/visits/visit-detail/${id}`);
+    push(PATH_DASHBOARD.visits.detailed.replace('[name]', id));
   }
 
   return (
